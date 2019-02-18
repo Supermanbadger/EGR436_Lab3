@@ -13,7 +13,9 @@ void LFXT_Init ();
 void LedOutput_Init();
 void Input_Init();
 void TimerA1_Init();
+void TimerA2_Init();
 int BPMToTicks(int bpm);
+void TimerA2_Delay(uint16_t ms);
 //void TA1_0_IRQHandler();
 
 

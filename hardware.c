@@ -59,8 +59,25 @@ void TimerA1_Init()
     NVIC_EnableIRQ(TA1_0_IRQn);
 }
 //================================================================
+void TimerA2_Init()
+{
+    TIMER_A2->CTL &=~ 0x3F7;  //Set TACTL to 0
+    TIMER_A2->CTL |=  0x01D6;  //PG 132 in book
+    TIMER_A2->EX0 = 0; //1:1
 
+}
 //================================================================
+void TimerA2_Delay(uint16_t ms) //with 32000 aclk 4.096 ticks = 1 ms.  Basic delay that keeps msp busy
+{
+    if (ms*4096 < 65535)
+    {
+        TIMER_A2->CCR[0] = ms*40;
+        while ((TIMER_A2->CCTL[0]&1)==0);
+        TIMER_A2->CCTL[0]&= ~1; //clears int flag
+
+    }
+
+}
 //================================================================
 //================================================================
 //uint32_t BPM-to-Ticks(int )

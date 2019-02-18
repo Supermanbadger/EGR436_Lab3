@@ -35,6 +35,7 @@ void main(void)
     {
         err = BT_init();
     }
+
     InitSoftware();
 
 
@@ -52,6 +53,7 @@ void InitHardware()
     UART0_init();
     UART2_init();
     LedOutput_Init();
+    TimerA2_Init();
     __enable_irq();
 }
 
@@ -193,7 +195,7 @@ void Lab3_MainMenu(void)
     {
         while(!CheckFullCommandBT());  //Look for newline character in the buffer
 
-        ReadFromBuffer();   //Get full command
+        ReadFromBufferBT();   //Get full command
 
         UART_ParseCommandBT(RxRead, sizeof(RxRead), command);
 

@@ -32,10 +32,11 @@ uint8_t BT_init()
     if (strstr(RxRead, "OK") != NULL)
     {
 
-
+        TimerA2_Delay(10);
         memset(data, 0, sizeof(data));
         strncpy(data,"AT+START",8);
         UART_ReturnData(data, strlen(data),2);
+        TimerA2_Delay(10);
 
         //printf("Good");
         return 0;
@@ -55,7 +56,7 @@ int CheckFullCommandBT()
     for(i=RxReadIndex; i!=RxWriteIndex; i = (i+1)%BUFFER_SIZE)
     {
 
-        if(RxBuffer[i] == '@')
+        if(RxBuffer[i] == '#')
         {
             RxReadTo = ++i;
             return 1;
@@ -96,7 +97,7 @@ int UART_ParseIndexBT(uint8_t * inString, uint16_t len, uint8_t * index)
             break;
         }
     }
-    i+=2; //Skip EOT and Null char in buff
+    i+=1; //Skip EOT and Null char in buff
 
     for(i; i < len ; i++)
     {
@@ -112,6 +113,21 @@ int UART_ParseIndexBT(uint8_t * inString, uint16_t len, uint8_t * index)
     return 0;
 
 }
+
+
+void ReadFromBufferBT()
+{
+    int i = 0;
+
+    for(RxReadIndex; RxReadIndex != RxReadTo; RxReadIndex = (RxReadIndex + 1) % BUFFER_SIZE)
+    {
+        RxRead[i++] = RxBuffer[RxReadIndex];
+
+    }
+    RxRead[i] = '\0';
+    UARTFlag = 0;
+}
+//======
 
 
 
